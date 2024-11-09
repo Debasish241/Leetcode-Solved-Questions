@@ -1,10 +1,9 @@
 class Solution {
     public long minEnd(int n, int x) {
-         long num = x ;
-         for (int i = 1 ; i < n; i ++){
-            num = (num+1)| x;
-
-         }
-         return num;
+        long nums=x;
+        for(int i=1;i<n;i++){
+            nums=(nums+1)|x;
+        }
+        return nums;
     }
 }
