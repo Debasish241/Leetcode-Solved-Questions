@@ -1,39 +1,39 @@
 class Solution {
     public int countPalindromicSubsequence(String s) {
-        char[] c = s.toCharArray();
-        boolean[] v = new boolean[26];
-        int a=0, t=0;
+        if(s.length()==3){
+            if(s.charAt(0)==s.charAt(2)) return 1 ;
+        }
+        final int[][] start = new int[26][];
+        final int[] freq = new int[26];
+        final char[] str = s.toCharArray();
+        int nonFinishCnt = 0;
+        for(int i = 0; i < str.length; i++) {
+            final int index = str[i] - 'a';
+            freq[index]++;
+            if (start[index] == null)  {
+                nonFinishCnt++;
+                start[index] = Arrays.copyOf(freq, freq.length);
+            }
+        }
+        final boolean[] finish = new boolean[26];
+        int answer = 0;
+        for(int i = str.length - 1; i >= 0; i--) {
+            final int index = str[i] - 'a';
+            freq[index]--;
+            if (!finish[index]) {
+                for(int j = 0; j < 26; j++) {
+                    if (freq[j] - start[index][j] > 0) {
+                        answer++;
+                    }
+                }
 
-        int l, r;
-        for(char x='a'; x<='z'; x++){
-            // find the first occurance from left
-            for(l=0; l<c.length && c[l]!=x; l++);
-                if(l==c.length)
-                    continue;
-
-            //find the first occurance from right
-            for(r=c.length-1; r>=0 && c[r]!=x; r--);
-                if(l>=r)
-                    continue;
-
-            //set all values to false
-            Arrays.fill(v, false); t=0;
-            
-            for(int i=l+1; i<r; i++){
-                // if not visited then increment t else dont
-                if(!v[c[i]-'a']) {
-
-                    v[c[i]-'a']=true;
-                    t++;
-                    
-                    if(t==26)
-                        break;
-
+                finish[index] = true;
+                if (--nonFinishCnt == 0) {
+                    return answer;
                 }
             }
-
-            a+=t;
         }
-        return a;
+        
+        return answer;
     }
 }
